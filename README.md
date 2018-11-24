@@ -19,9 +19,7 @@ The Red Eye Frame is composed of 15 bits:
 
 Generally, the length of each bit within the frame is 854.5 us, but this value could vary depend on the IR sensor implemented. It is advisable to test with an oscilloscope the output of the sesor before making any assumptions. The logic level of one bit is defined by the position of a high state within the pulse. The high state takes 244 us, time in which the IR Led is switching on and off every 15.15 us (one cycle 30.3 us).
 
-<p align="center">
 ![](img/bit.png)
-</p>
 
 ## Prototype
 
