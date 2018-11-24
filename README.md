@@ -23,9 +23,7 @@ Generally, the length of each bit within the frame is 854.5 us, but this value c
 
 ## Prototype
 
-<p align="center">
 ![](img/board1.png)
-</p>
 
 ## Software
 
