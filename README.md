@@ -27,6 +27,8 @@ Generally, the length of each bit within the frame is 854.5 us, but this value c
 
 ## Prototype
 
+The PCB prototype contains both an IR sensor and LED to implement a bidirectional communication with the electronic counter. Additionally, a wireless LAN module was added to request and get the data remotely. The implementation of this module will be discussed in another repository to maintain this one consistent.
+
 <p align="center">
   <img src="img/board1.png">
 </p>

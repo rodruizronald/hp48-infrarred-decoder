@@ -17,7 +17,7 @@
 #include <stdint.h>
 #include <stdarg.h>
 #include <avr/io.h>
-#include <avr/interrupt.h>
+#include <util/setbaud.h>
 #include "bitwiseop.h"
 #include "uart.h"
 
@@ -77,7 +77,7 @@ void UART_init(void)
 //! @return None.
 //
 //*****************************************************************************
-void UART_write_char(char data)
+void UART_write_char(char c)
 {
 	//
 	//	Wait for empty transmit buffer.
@@ -87,7 +87,7 @@ void UART_write_char(char data)
 	//
 	//	Put data into buffer, sends the data.
 	//
-	UDR0 = data;
+	UDR0 = c;
 }
 
 //*****************************************************************************

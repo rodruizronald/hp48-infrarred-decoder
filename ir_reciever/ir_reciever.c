@@ -14,7 +14,6 @@
 //*****************************************************************************
 
 #include <stdint.h>
-#include <stdint.h>
 #include <stdbool.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
@@ -105,7 +104,7 @@ void IR_Reciever_init(void)
 //
 //! @brief Returns the data buffer to the user.
 //!
-//! @return g_data_buffer a pointer to the data buffer.
+//! @return g_data_buffer Pointer to the data buffer.
 //
 //*****************************************************************************
 uint8_t* IR_get_data(void)
@@ -120,7 +119,7 @@ uint8_t* IR_get_data(void)
 //! This function checks if there is any pending event, if note the user is
 //! informed to proceed with the data acquisition.
 //!
-//! @return status a bool flag to indicate data availability.
+//! @return status Flag to indicate data availability.
 //
 //*****************************************************************************
 bool IR_is_data_available(void)
@@ -190,88 +189,6 @@ static void TIMER1_init(void)
   //
   _set_two_bits(TIFR1, ICF1, TOV1);
   _set_two_bits(TIMSK1, ICIE1, TOIE1);
-}
-
-//*****************************************************************************
-//
-//! @brief ISR vector for the TIMER1 OverFlow.
-//!
-//! This ISR updates a global virtual counter to keep track of the overall
-//! time elapsed since the first Input Capture ISR. In the last two bytes
-//! of this virtual counter the TIMER1 High and Low byte will be added.
-//
-//*****************************************************************************
-ISR (TIMER1_OVF_vect)
-{
-  //
-  //  += (uint64_t) 0x10000.
-  //  00000000 -> byte 6.
-  //  00000000 -> byte 5.
-  //  00000000 -> byte 4.
-  //  00000001 -> byte 3.
-  //  00000000 -> byte 2 (TIMER1 High Byte - ICR1H).
-  //  00000000 -> byte 1 (TIMER1 Low Byte - ICR1L).
-  //
-  g_virtual_cnt += (uint64_t) 0x10000;
-}
-
-//*****************************************************************************
-//
-//! @brief ISR vector for the TIMER1 Capture Input.
-//!
-//! This ISR access the TIMER1 High and Low byte to get the pulse width in us
-//! (time elapsed since the last event). In each event the edge-triggered
-//! configuration must be switched from falling to rising and viceversa to
-//! guarantee a next call.
-//
-//*****************************************************************************
-ISR (TIMER1_CAPT_vect)
-{
-  //
-  //  Capture the current time in TIMER1.
-  //  ICR1H: High Byte.
-  //  ICR1L: Low Byte.
-  //
-  uint16_t timer_value = ((ICR1H << 8) | ICR1L);
-
-  //
-  //  Switch the edge-triggered configuration.
-  //
-  if (g_is_edge_falling)
-  {
-    //
-    //  Capture rising edge next time.
-    //
-    _set_bit(TCCR1B, ICES1);
-  }
-  else
-  {
-    //
-    //  Capture falling edge next time.
-    //
-    _clear_bit(TCCR1B, ICES1);
-  }
-  g_is_edge_falling = !g_is_edge_falling;
-
-  //
-  //  Store the input capture time of rising/falling edge-triggered.
-  //
-  g_event_buffer[g_event_buffer_index] = g_virtual_cnt + timer_value;
-
-  //
-  //  Increase event buffer index.
-  //
-  g_event_buffer_index++;
-
-  //
-  //  Check if event buffer is full.
-  //
-  if (g_event_buffer_index == EVENT_BUFFER_SIZE)
-  {
-      g_byte_cnt++;
-      g_event_buffer_index = 0;
-      g_is_event_buffer_full = true;
-  }
 }
 
 //*****************************************************************************
@@ -356,8 +273,8 @@ static void update_data_buffer(void)
 //! This function evalutes the bit position passed to determine where should
 //! be written the logic level.
 //!
-//! @param[in] bit_position postion of one bit in the data frame.
-//! @param[in] logic_level bool value to determine logic level of the bit.
+//! @param[in] bit_position Postion of one bit in the data frame.
+//! @param[in] logic_level Logic level of the bit, true or false (1 or 0).
 //!
 //! @return None.
 //
@@ -404,8 +321,8 @@ static void find_bit_position(uint8_t bit_position, bool logic_level)
 //
 //! @brief Writes either 1 or 0 in the passed bit.
 //!
-//! @param[in] bit an sepecifc bit postion form 0-7.
-//! @param[in] logic_level bool value to determine logic level of the bit.
+//! @param[in] bit Specific bit postion form 0-7.
+//! @param[in] logic_level Logic level of the bit, true or false (1 or 0).
 //!
 //! @return None.
 //
@@ -422,5 +339,92 @@ static void write_bit(uint8_t bit, bool logic_level)
   else
   {
     _clear_bit(g_data_buffer[g_byte_cnt], bit);
+  }
+}
+
+//*****************************************************************************
+//
+//  Interrupt Service Routines
+//
+//*****************************************************************************
+//*****************************************************************************
+//
+//! @brief ISR vector for the TIMER1 OverFlow.
+//!
+//! This ISR updates a global virtual counter to keep track of the overall
+//! time elapsed since the first Input Capture ISR. In the last two bytes
+//! of this virtual counter the TIMER1 High and Low byte will be added.
+//
+//*****************************************************************************
+ISR (TIMER1_OVF_vect)
+{
+  //
+  //  += (uint64_t) 0x10000.
+  //  00000000 -> byte 6.
+  //  00000000 -> byte 5.
+  //  00000000 -> byte 4.
+  //  00000001 -> byte 3.
+  //  00000000 -> byte 2 (TIMER1 High Byte - ICR1H).
+  //  00000000 -> byte 1 (TIMER1 Low Byte - ICR1L).
+  //
+  g_virtual_cnt += (uint64_t) 0x10000;
+}
+
+//*****************************************************************************
+//
+//! @brief ISR vector for the TIMER1 Capture Input.
+//!
+//! This ISR access the TIMER1 High and Low byte to get the pulse width in us
+//! (time elapsed since the last event). In each event the edge-triggered
+//! configuration must be switched from falling to rising and viceversa to
+//! guarantee a next call.
+//
+//*****************************************************************************
+ISR (TIMER1_CAPT_vect)
+{
+  //
+  //  Capture the current time in TIMER1.
+  //  ICR1H: High Byte.
+  //  ICR1L: Low Byte.
+  //
+  uint16_t timer_value = ((ICR1H << 8) | ICR1L);
+
+  //
+  //  Switch the edge-triggered configuration.
+  //
+  if (g_is_edge_falling)
+  {
+    //
+    //  Capture rising edge next time.
+    //
+    _set_bit(TCCR1B, ICES1);
+  }
+  else
+  {
+    //
+    //  Capture falling edge next time.
+    //
+    _clear_bit(TCCR1B, ICES1);
+  }
+  g_is_edge_falling = !g_is_edge_falling;
+
+  //
+  //  Store the input capture time of rising/falling edge-triggered.
+  //
+  g_event_buffer[g_event_buffer_index] = g_virtual_cnt + timer_value;
+
+  //
+  //  Increase event buffer index.
+  //
+  g_event_buffer_index++;
+
+  //
+  //  Check if event buffer is full.
+  //
+  if (g_event_buffer_index == EVENT_BUFFER_SIZE)
+  {
+      g_byte_cnt++;
+      g_event_buffer_index = 0;
+      g_is_event_buffer_full = true;
   }
 }
