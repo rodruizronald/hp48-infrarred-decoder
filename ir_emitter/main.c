@@ -2,7 +2,6 @@
 //
 //  Test of the Red Eye protocol used by HP 48GX calculators (Emitter).
 //  File:     main.c
-//  Version:  1.0v
 //  Author:   Ronald Rodriguez Ruiz.
 //  Date:     September 30, 2016.
 //  ---------------------------------------------------------------------------

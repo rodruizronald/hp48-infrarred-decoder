@@ -411,7 +411,17 @@ static const uint8_t g_clean_memory_cmd_len[] =
 
 //*****************************************************************************
 //
-//  Functions for the API
+//  Prototypes for private functions.
+//
+//*****************************************************************************
+
+static void ir_led_transmission(uint8_t level);
+static void frame_transmission(const uint8_t* data_frame, uint8_t length);
+static void command_transmission(const uint8_t* frames[], const uint8_t* frames_length, uint8_t num_frames);
+
+//*****************************************************************************
+//
+//  Functions for the API.
 //
 //*****************************************************************************
 //*****************************************************************************
@@ -421,7 +431,8 @@ static const uint8_t g_clean_memory_cmd_len[] =
 //! @return None.
 //
 //*****************************************************************************
-void IR_Emitter_init(void)
+void
+IR_Emitter_init(void)
 {
   //
   //  Configure the IR LED as output and set low
@@ -442,7 +453,8 @@ void IR_Emitter_init(void)
 //! @return None.
 //
 //*****************************************************************************
-void IR_send_request(uint8_t command)
+void
+IR_send_request(uint8_t command)
 {
 
   //
@@ -473,7 +485,7 @@ void IR_send_request(uint8_t command)
 
 //*****************************************************************************
 //
-//  Private Functions
+//  Private Functions.
 //
 //*****************************************************************************
 //*****************************************************************************
@@ -490,7 +502,8 @@ void IR_send_request(uint8_t command)
 //! @return None.
 //
 //*****************************************************************************
-static void command_transmission(const uint8_t* frames[], const uint8_t* frames_length, uint8_t num_frames);
+static void
+command_transmission(const uint8_t* frames[], const uint8_t* frames_length, uint8_t num_frames);
 {
   for (uint8_t i = 0; i < num_frames; i++)
   {
@@ -515,7 +528,8 @@ static void command_transmission(const uint8_t* frames[], const uint8_t* frames_
 //! @return None.
 //
 //*****************************************************************************
-void frame_transmission(const uint8_t* data_frame, uint8_t length)
+static void
+frame_transmission(const uint8_t* data_frame, uint8_t length)
 {
   uint8_t i;
 
@@ -555,7 +569,8 @@ void frame_transmission(const uint8_t* data_frame, uint8_t length)
 //! @return None.
 //
 //*****************************************************************************
-void ir_led_transmission(uint8_t level)
+static void
+ir_led_transmission(uint8_t level)
 {
   uint8_t cycles;
   switch (level)

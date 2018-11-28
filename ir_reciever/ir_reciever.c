@@ -78,7 +78,18 @@ static volatile uint64_t g_event_buffer[EVENT_BUFFER_SIZE];
 
 //*****************************************************************************
 //
-//  Functions for the API
+//  Prototypes for private functions.
+//
+//*****************************************************************************
+
+static void TIMER1_init(void);
+static void update_data_buffer(void);
+static void write_bit(uint8_t bit, bool logic_level);
+static void find_bit_position(uint8_t bit_position, bool logic_level);
+
+//*****************************************************************************
+//
+//  Functions for the API.
 //
 //*****************************************************************************
 //*****************************************************************************
@@ -88,7 +99,8 @@ static volatile uint64_t g_event_buffer[EVENT_BUFFER_SIZE];
 //! @return None.
 //
 //*****************************************************************************
-void IR_Reciever_init(void)
+void
+IR_Reciever_init(void)
 {
   g_byte_cnt = 0;
   g_last_event = 0;
@@ -107,7 +119,8 @@ void IR_Reciever_init(void)
 //! @return g_data_buffer Pointer to the data buffer.
 //
 //*****************************************************************************
-uint8_t* IR_get_data(void)
+uint8_t*
+IR_get_data(void)
 {
   return g_data_buffer;
 }
@@ -122,7 +135,8 @@ uint8_t* IR_get_data(void)
 //! @return status Flag to indicate data availability.
 //
 //*****************************************************************************
-bool IR_is_data_available(void)
+bool
+IR_is_data_available(void)
 {
   bool status = false;
 
@@ -150,7 +164,7 @@ bool IR_is_data_available(void)
 
 //*****************************************************************************
 //
-//  Private Functions
+//  Private Functions.
 //
 //*****************************************************************************
 //*****************************************************************************
@@ -165,7 +179,8 @@ bool IR_is_data_available(void)
 //! @return None.
 //
 //*****************************************************************************
-static void TIMER1_init(void)
+static void
+TIMER1_init(void)
 {
   //
   //  Clear the TIMER1 registers.
@@ -203,7 +218,8 @@ static void TIMER1_init(void)
 //! @return None.
 //
 //*****************************************************************************
-static void update_data_buffer(void)
+static void
+update_data_buffer(void)
 {
   //
   //  General counter varaibles for loops and events.
@@ -279,7 +295,8 @@ static void update_data_buffer(void)
 //! @return None.
 //
 //*****************************************************************************
-static void find_bit_position(uint8_t bit_position, bool logic_level)
+static void
+find_bit_position(uint8_t bit_position, bool logic_level)
 {
   switch (bit_position)
   {
@@ -327,7 +344,8 @@ static void find_bit_position(uint8_t bit_position, bool logic_level)
 //! @return None.
 //
 //*****************************************************************************
-static void write_bit(uint8_t bit, bool logic_level)
+static void
+write_bit(uint8_t bit, bool logic_level)
 {
   //
   //  Based on the logic level value the bit position will be set (1) or clear (0)
