@@ -36,8 +36,8 @@ The PCB prototype contains both an IR sensor and LED to implement a bidirectiona
 ## Software
 
 * Atmel Studio 6.0 - Integrated Development Platform for developing and debugging AVR microcontrollers.
-* Eagle PCB Design - PCB layout and schematic design software
+* Eagle PCB Design - PCB layout and schematic design software.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
