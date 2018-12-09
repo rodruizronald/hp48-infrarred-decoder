@@ -78,7 +78,7 @@ static volatile uint64_t g_event_buffer[EVENT_BUFFER_SIZE];
 
 //*****************************************************************************
 //
-//  Prototypes for private functions.
+//  Prototypes for the private functions.
 //
 //*****************************************************************************
 

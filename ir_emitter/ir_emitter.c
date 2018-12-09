@@ -411,7 +411,7 @@ static const uint8_t g_clean_memory_cmd_len[] =
 
 //*****************************************************************************
 //
-//  Prototypes for private functions.
+//  Prototypes for the private functions.
 //
 //*****************************************************************************
 
